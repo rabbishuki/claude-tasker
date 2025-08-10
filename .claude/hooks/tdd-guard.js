@@ -81,10 +81,11 @@ function isInImplementationPhase() {
     
     const features = fs.readdirSync(featuresDir);
     for (const feature of features) {
-      const statusFile = path.join(featuresDir, feature, 'status.json');
-      if (fs.existsSync(statusFile)) {
-        const status = JSON.parse(fs.readFileSync(statusFile, 'utf8'));
-        if (status.current_phase === 'implementation') {
+      const workFile = path.join(featuresDir, feature, 'work.md');
+      if (fs.existsSync(workFile)) {
+        const workContent = fs.readFileSync(workFile, 'utf8');
+        // In implementation if has Development Task but no QA approval
+        if (workContent.includes('**Development Task**') && !workContent.includes('✅ QA APPROVED')) {
           return true;
         }
       }

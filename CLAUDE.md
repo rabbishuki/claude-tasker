@@ -23,74 +23,133 @@ This project uses Claude Code with the Tasker workflow system for structured fea
 - **Testing**: Jest/Vitest + React Testing Library
 - **Database**: PostgreSQL with proper migrations
 - **State Management**: React Context + custom hooks (prefer immutable patterns)
+- **Development**: Full-stack developer handles frontend OR backend per task
 
 ## Tasker Workflow System
 
-This project uses the Tasker system for structured feature development with specialized AI sub-agents.
+This project uses the Tasker system for **micro-task development** with specialized AI sub-agents. Optimized for startup velocity with focused, single-task iterations.
 
 ### Available Commands
 
 #### Core Workflow Commands
-- `/tasker-start [feature-name]` - Begin complete feature workflow from business requirements
-- `/tasker-continue [feature-name]` - Resume workflow from current phase  
-- `/tasker-status [feature-name]` - Show current progress and next actions
-- `/tasker-approve [feature-name] [document-type]` - Approve draft documents and progress phases
+- `/tasker-start [feature-name]` - Create new feature with business analysis
+- `/tasker-continue [feature-name]` - Resume workflow with intelligent next-step detection
+- `/tasker-status [feature-name]` - Show current progress and backlog management  
+- `/tasker-implement [feature-name]` - Execute development task with strict TDD
+- `/tasker-close [feature-name]` - Mark feature complete, migrate backlog items, cleanup files
 
-#### Implementation Commands  
-- `/tasker-implement [feature-name] [task-id]` - Execute coding tasks with strict TDD
-- Use for frontend tasks: React components, state management, user interactions
-- Use for backend tasks: APIs, services, database operations, integrations
+### Micro-Task Workflow (Startup Optimized)
 
-### Workflow Phases (7 Total)
+**Philosophy**: Each agent focuses on ONE task only, everything else goes to backlog for later prioritization.
 
-1. **Business Requirements** - Business analyst gathers comprehensive requirements
-2. **Product Specification** - Product manager creates user-centered specifications  
-3. **Technical Architecture** - Solution architect explores codebase and creates epic-level breakdown
-4. **Development Tasks** - Tech lead creates detailed implementation tasks with file paths
-5. **Implementation** - Frontend/backend developers build with strict TDD
-6. **QA Testing** - QA engineer creates comprehensive test plans
-7. **Security Review** - Security analyst performs vulnerability assessment
+**Process Flow:**
+1. **Business Analyst** - Creates focused business need (2-3 lines) + adds ideas to global backlog
+2. **Product Manager** - Adds UX details (2-3 lines) + feature ideas to backlog  
+3. **Solution Architect** - Risk assessment (can REJECT and redirect to safer alternatives)
+4. **Tech Lead** - Single implementation task (1-2 days max) + specifies Frontend/Backend focus
+5. **Developer** - Full-stack developer implements with strict TDD (one side per task)
+6. **QA Engineer** - Quick validation with standardized approval markers
+7. **Security Analyst** - Fast security check with standardized approval markers
+
+### Intelligent Agent Skipping
+
+**Smart Workflow Optimization**: Agents automatically detect when they're not needed and skip themselves.
+
+**Skip Conditions:**
+- **Business Analyst**: Skips technical fixes, refactoring, internal tooling
+- **Product Manager**: Skips pure backend work, technical changes with no UX impact  
+- **Solution Architect**: Skips simple bug fixes, low-risk changes, styling/config
+- **QA Engineer**: Skips refactoring, docs, config changes with no user-facing impact
+- **Security Analyst**: Skips styling, docs, changes with no data/auth/external interactions
+
+**Manual Override**: Add skip flags to work.md when needed:
+```markdown
+SKIP_BUSINESS: true
+SKIP_PRODUCT: true  
+SKIP_ARCHITECT: true
+SKIP_QA: true
+SKIP_SECURITY: true
+```
 
 ### File Structure
 
-Each feature creates this structure:
+Date-prefixed features with clear active/done distinction:
 ```
-docs/features/[feature-name]/
-├── drafts/                    # Sub-agent outputs awaiting approval
-│   ├── business-requirements.draft.md
-│   ├── product-specification.draft.md
-│   ├── technical-architecture.draft.md
-│   ├── development-tasks.draft.md
-│   ├── qa-test-plan.draft.md
-│   └── security-review.draft.md
-├── approved/                  # User-approved final documents
-│   ├── business-requirements.md
-│   ├── product-specification.md
-│   ├── technical-architecture.md
-│   └── development-tasks.md
-└── status.json              # Current phase and progress tracking
+docs/
+├── backlog.md                           # Global business ideas across features
+└── features/
+    ├── YY-MM-DD-[feature-name]/         # Active features (folders)
+    │   ├── work.md                      # Current single task (all agents append)
+    │   └── backlog.md                   # Feature-specific backlog by section
+    └── YY-MM-DD-[completed].md          # Done features (files)
 ```
 
-### Draft/Approval Process
+**Status Logic**: Folders = active work, Files = completed features
 
-1. Sub-agents create documents in `drafts/` folder
-2. **You review and edit draft files directly** in your editor
-3. Run `/tasker-approve [feature-name] [document-type]` when ready
-4. Approved documents move to `approved/` folder  
-5. Next phase begins automatically
+### Append-Only Workflow
 
-### Issue Handling
+**All agents append to single `work.md`** (no separate documents):
+```markdown
+**Business Need**: [2-3 sentences about problem and solution]
+**Current Task**: [The one thing we'll build]  
+**Success Metric**: [How we know this task worked]
 
-Sub-agents may flag concerns:
+**User Experience**: [How users will interact with this task]
+**Priority Rationale**: [Why this task first vs alternatives]
+**Edge Cases**: [Main user confusion points to handle]
+
+**✅ TECHNICAL APPROVED**
+**Implementation Notes**: [Key technical approach or constraints]
+
+**Development Task**: [Single focused implementation story]
+**Focus**: [Frontend | Backend] - which side to implement
+**Files to Change**: 
+- Create: [specific-file-path]
+- Modify: [specific-file-path:line-numbers]
+**Acceptance Criteria**:
+- [ ] [Testable outcome 1]
+- [ ] [Testable outcome 2]
+
+**✅ QA APPROVED**
+**Acceptance Criteria Verified:**
+- [✓] [Criteria 1] - Works as expected
+
+**✅ SECURITY APPROVED**  
+**Security Check:**
+- [✓] Input validation present
+- [✓] No obvious injection vulnerabilities
 ```
-⚠️ I noticed [specific issue]
 
-Should I:
-[ ] Continue anyway and work around this
-[ ] Go back to fix [previous phase] first
+### Two-Tier Backlog System
+
+**Global Backlog (`docs/backlog.md`)**:
+```markdown
+# Global Business Ideas
+- [Cross-feature concepts - one-liners]
+- [New feature ideas]
 ```
 
-**Your choice** - you can skip issues and continue, or go back and address them.
+**Feature Backlog (`backlog.md`)**:
+```markdown
+## Product Features
+- [UX improvements]
+- [Alternative user flows]
+
+## Technical Concerns  
+- [Architecture issues flagged by architect]
+- [Performance considerations]
+
+## Development Tasks
+- [Implementation tasks from tech lead]
+- [Technical debt items]
+```
+
+### Decision Gates and User Control
+
+- **Solution Architect** can REJECT tasks → redirects to Product Manager for safer alternatives
+- **QA Engineer** can REJECT implementation → back to Developer for fixes
+- **Security Analyst** can BLOCK deployment → back to Developer for security fixes
+- **User chooses next direction** after each task completion (current feature backlog, different feature, or new business idea)
 
 ## Technology-Specific Guidelines
 
@@ -219,39 +278,44 @@ const createPayment = (options: CreatePaymentOptions): Payment => {
 
 ## Development Workflow
 
-### Feature Development Process
-1. **Run `/tasker-start [feature-name]`** to begin structured workflow
-2. **Review and edit each draft document** as sub-agents create them
-3. **Approve documents** with `/tasker-approve` when ready to proceed
-4. **Implement with TDD** using `/tasker-implement` for coding tasks
-5. **Test thoroughly** with comprehensive QA and security review
+### Micro-Task Development Process
+1. **Run `/tasker-start [feature-name]`** - Creates folder structure and launches business analyst
+2. **Run `/tasker-continue [feature-name]`** - Intelligent next-step detection and agent launching
+3. **Agents append to work.md** - Each agent adds 2-3 lines focused on current task only
+4. **Quality gates** - QA and Security use standardized approval markers
+5. **User chooses next** - System presents backlog options, user decides direction
+
+### Decision Points (You Control Priority)
+- **After each task completion**: Choose from Development Tasks, Product Features, Global Ideas, or different feature
+- **When architect rejects**: Choose safer alternative from product backlog or modify current task
+- **At any time**: Use `/tasker-status` to see all backlogs and make priority decisions
 
 ### Quality Gates
-- **All tests must pass** before any code merge
+- **Solution Architect** - Can reject risky tasks before implementation
+- **All tests must pass** - TDD enforced at implementation
 - **TypeScript compilation clean** - no errors or warnings
-- **Linting rules satisfied** - consistent code style
-- **Security review passed** - no critical vulnerabilities
-- **Performance benchmarks met** - response times within limits
+- **QA approval** - Fast validation of acceptance criteria
+- **Security approval** - Quick security check before deploy
 
 ### Git Workflow
-- **Feature branches** - `feature/[feature-name]` for all new features
+- **Feature branches** - `feature/YY-MM-DD-[feature-name]` 
 - **Conventional commits** - `feat:`, `fix:`, `refactor:`, `test:` prefixes
-- **Small, atomic commits** - each commit represents complete, working change
-- **Include tests with features** - test changes in same commit as feature changes
+- **Small, atomic commits** - each task is 1-2 days max
+- **Include tests with features** - TDD ensures test coverage
 
 ## Troubleshooting
 
 ### Common Issues
-- **Draft file not found**: Ensure you've saved the draft file after editing
-- **Phase progression blocked**: Check for missing prerequisites with `/tasker-status`
+- **Task too complex**: Solution architect should reject and redirect to simpler backlog item
 - **TDD cycle stuck**: Verify all existing tests are green before writing new code
-- **Integration issues**: Use `/tasker-continue` to resume from any point
+- **Integration issues**: Use `/tasker-continue` to pick next task or different feature
+- **Backlog getting too big**: Focus on current task, resist urge to over-plan
 
 ### Getting Help
 - **View current status**: `/tasker-status [feature-name]`
 - **Resume workflow**: `/tasker-continue [feature-name]`  
-- **See all features**: Check `docs/features/` directory
-- **Reset corrupted state**: Delete `status.json` and use `/tasker-continue`
+- **See all features**: Check `docs/features/` directory (sorted by date)
+- **Check backlogs**: Global `docs/backlog.md` or feature-specific `backlog.md`
 
 ## Success Metrics
 
@@ -261,10 +325,15 @@ const createPayment = (options: CreatePaymentOptions): Payment => {
 - **Performance**: API responses under 200ms, UI interactions under 100ms
 - **Accessibility**: WCAG 2.1 AA compliance for all user interfaces
 
-### Development Velocity  
-- **Feature completion**: Complete 7-phase workflow for each feature
-- **Documentation quality**: Comprehensive docs for all business and technical decisions
-- **Security compliance**: Zero critical or high-severity security findings
-- **Deployment readiness**: Features deployable immediately after security review
+### Development Velocity
+- **Task completion**: Each task implementable in 1-2 days max
+- **Decision speed**: Quick approval/rejection at each gate
+- **Iteration rate**: Multiple task completions per week
+- **Deployment frequency**: Ship working features quickly and often
 
-Remember: The Tasker system guides you through proven development practices. Trust the process, follow TDD religiously, and create features that are well-documented, thoroughly tested, and ready for production deployment.
+### Backlog Health
+- **Global backlog**: Concise business ideas for new features
+- **Feature backlogs**: Sectioned by role, no duplicate tracking
+- **Priority clarity**: Always know what to work on next
+
+Remember: The Tasker system optimizes for startup velocity. Focus on current task, defer complexity to backlog, and ship working software quickly.
