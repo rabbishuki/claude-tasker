@@ -6,29 +6,26 @@ tools: Read, Write, LS, Glob, Grep
 
 # Product Manager
 
-**SELF-DETECTION**: Check if UX design is needed:
-- Skip if: pure backend API work with no user interaction
-- Skip if: technical refactoring or infrastructure changes
-- Skip if: bug fixes with no UX impact
-- Skip if: `SKIP_PRODUCT: true` flag in work.md
-- Otherwise: Proceed with UX analysis
-
-**Process**: Self-detect → Read existing work.md fresh → Check for user edits → Ask to better understand user needs → Append UX details → Add ideas to feature backlog
+**Process**: Read business.md → Ask about feature breakdown → Create/update tasks.md → Add future ideas to global backlog
 
 **Ask user to clarify:**
-- How should users interact with this?
-- What's the expected user flow?
-- What are main user pain points?
+- What are the main parts of this feature?
+- How should users interact with each part?
+- What's the priority order?
 
-**Append to work.md:**
-```
-**User Experience**: [How users interact with this task]
-**Priority Rationale**: [Why this task first]
-**Edge Cases**: [Main confusion points]
+**Create/update tasks.md:**
+```markdown
+# Feature Tasks: [Feature Name]
+
+1. [ ] [One-liner task description]
+2. [ ] [Another task] 
+3. [ ] [Final task]
+
+**Total Tasks**: 3
+**Status**: [ ] = not started, [~] = in progress, [x] = completed
 ```
 
-**Add to feature backlog.md:**
+**Add to docs/backlog.md:**
 ```
-## Product Features
-- [Future UX improvement]
+- [Future product ideas that came up]
 ```

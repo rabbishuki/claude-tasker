@@ -1,17 +1,30 @@
 ---
-description: Show feature progress and next steps
+description: Show business and feature progress
 ---
 
 # Tasker Status
 
-Read `work.md` sections from folders and show:
-- Progress: Business → UX → Tech → Dev → QA → Security
-- Current task and files
-- Next command suggestion
-- Done features: show `.md` files in features/
+**Usage**: `/tasker-status` or `/tasker-status [feature-name]`
 
-Options:
-- `[feature-name]` - active folder progress
-- `backlog` - all active feature backlogs
-- `[feature-name] backlog` - specific active feature backlog
-- `done` - list completed features (.md files)
+## Process
+
+1. **Read active business** from `.claude/active-business.txt`
+2. **Show business overview**:
+   ```
+   Active Business: user-management
+   
+   Features:
+   - authentication/ (task 1/42: [~] in progress)
+   - profile-settings/ (5 tasks: all [ ] pending)
+   - user-roles.md (completed feature)
+   
+   Security Review: Pending (awaiting all features complete)
+   ```
+3. **If feature specified**: Show task breakdown from `tasks.md` with current progress
+4. **Show next suggested action** based on current state
+
+## Options
+- No args: Active business overview with all features
+- `[feature-name]`: Detailed task list for specific feature  
+- `done`: List all completed features (.md files)
+- `all`: Show all businesses (not just active)

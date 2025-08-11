@@ -1,43 +1,41 @@
 ---
-description: Close and mark feature as done with backlog cleanup
+description: Close feature and create consolidated documentation
 ---
 
 # Tasker Close
 
-**Purpose**: Mark feature as completed, migrate important backlog items, and clean up files.
+**Usage**: `/tasker-close [feature-name]` or `/tasker-close [business-name] [feature-name]`
 
 ## Process
 
-1. **Verify feature exists** as folder `docs/features/YY-MM-DD-[feature-name]/`
-2. **Read feature backlog** from `backlog.md`
-3. **Ask user to select important items**:
-   - Show all items from feature backlog grouped by section
-   - Ask "Which of these should move to global backlog? (comma-separated numbers or 'none')"
-4. **Migrate selected items** to `docs/backlog.md`
-5. **Create done file** `docs/features/YY-MM-DD-[feature-name].md` with work.md contents
-6. **Delete entire folder** `docs/features/YY-MM-DD-[feature-name]/`
-7. **Confirm completion** with summary
-
-## User Interaction
-```
-Feature backlog items:
-## Product Features
-1. [UX improvement A]
-2. [Alternative flow B]
-
-## Technical Concerns  
-3. [Performance issue C]
-4. [Architecture concern D]
-
-## Development Tasks
-5. [Technical debt E]
-6. [Future enhancement F]
-
-Which items should move to global backlog? (numbers: 1,3,6 or 'none'): 
-```
+1. **Determine context** using active business or specified business-name
+2. **Verify completion**: All tasks in `tasks.md` marked `[x]`
+3. **Check for remaining features**: If this is the last feature in the business, trigger security review
+4. **Show consolidation options**:
+   ```
+   Consolidate [feature-name] tasks:
+   
+   1. Add login button - task-1.md
+   2. Add logout feature - task-2.md  
+   3. Password reset flow - task-3.md
+   
+   Which tasks to include in [feature-name].md?
+   - Enter numbers (1,3) 
+   - 'all' for everything
+   - 'none' for just feature summary
+   ```
+4. **Create consolidated file** `docs/business/*/features/[feature-name].md`:
+   ```markdown
+   # Feature: [feature-name]
+   
+   **Business Context**: [from business.md]
+   **Completed Tasks**: [selected task details]
+   **Status**: Completed [date]
+   ```
+5. **Delete feature folder** `docs/business/*/features/[feature-name]/`
+6. **If last feature**: Launch security-analyst for final business review
 
 ## Success Criteria
-- Single `.md` file created with completed work
-- Folder completely removed
-- Selected backlog items moved to global backlog
-- Clear distinction: folders = active, files = done
+- Feature folder removed, consolidated file created
+- If last feature: Security review initiated or business marked complete
+- Ready for future iterations on same feature

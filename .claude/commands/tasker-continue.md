@@ -1,22 +1,24 @@
 ---
-description: Continue feature workflow with fresh state detection
+description: Continue feature workflow with smart next-step detection
 ---
 
 # Tasker Continue
 
-**Always re-read files fresh - never assume cached state**
+**Usage**: `/tasker-continue [feature-name]` or `/tasker-continue [business-name] [feature-name]`
 
-1. **Read current state** from `docs/features/*-[feature-name]/work.md` (folders only)
-2. **Detect manual changes** - acknowledge if user edited since last run
-3. **Launch next agent** based on current reality:
-   - No Business Need → `business-analyst`
-   - No User Experience → `product-manager`  
-   - No Technical Approval → `solution-architect`
-   - Architecture Rejected → Guide to product manager
-   - No Development Task → `tech-lead`
-   - No Implementation → `/tasker-implement`
-   - No "✅ QA APPROVED" → `qa-engineer`
-   - No "✅ SECURITY APPROVED" → `security-analyst`
-   - Complete → Show backlog options
+## Process
 
-**User can interrupt anytime, edit work.md, then resume**
+1. **Determine context**:
+   - Use active business from `.claude/active-business.txt`
+   - If specified: use `[business-name]` parameter
+2. **Read current state** from `docs/business/*/features/[feature-name]/`
+3. **Detect manual changes** - acknowledge if user edited since last run
+4. **Launch next agent** based on current reality:
+   - No `business.md` → `business-analyst`
+   - Empty `tasks.md` → `product-manager`
+   - No task marked `[~]` → Ask user which task to start (mark as `[~]`)
+   - Task marked `[~]` but no `task-#.md` → `tech-lead`
+   - Task marked `[~]` with `task-#.md` → `fullstack-developer`
+   - All tasks `[x]` → Ready for `/tasker-close`
+
+**User can edit any file anytime, then resume with /tasker-continue**

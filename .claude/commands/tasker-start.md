@@ -1,23 +1,23 @@
 ---
-description: Start feature development workflow
+description: Start new feature within business context
 ---
 
 # Tasker Start
 
-1. Check `docs/features/*-[feature-name]/` folder exists → redirect to `/tasker-continue`
-2. Create `docs/features/YY-MM-DD-[feature-name]/`:
-   - `work.md` (empty)
-   - `backlog.md` (template below)
-3. Create `docs/backlog.md` if first feature
-4. Launch `business-analyst`
+**Usage**: `/tasker-start [feature-name]` or `/tasker-start [business-name] [feature-name]`
 
-## Templates
-```
-## Product Features
-## Technical Concerns  
-## Development Tasks
-```
+## Process
 
-```
-# Global Business Ideas
-```
+1. **Determine business context**:
+   - Use active business from `.claude/active-business.txt`
+   - If specified: use `[business-name]` parameter
+   - If multiple businesses exist and no active: ask user
+2. **Check feature exists** in `docs/business/*/features/[feature-name]/` → redirect to `/tasker-continue`
+3. **Create feature folder** `docs/business/YY-MM-DD-[business]/features/[feature-name]/`
+4. **Create files**:
+   - `tasks.md` (empty task list)
+5. **Launch product-manager** to create initial tasks
+
+## Success Criteria
+- Feature folder created within correct business context
+- Ready for product task breakdown
