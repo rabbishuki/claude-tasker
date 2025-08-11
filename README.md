@@ -4,7 +4,7 @@ Micro-task development workflow for Claude Code with specialized AI agents. Opti
 
 ## Installation
 
-### Option 1: NPX (Coming Soon)
+### Option 1: NPX
 ```bash
 npx claude-tasker init
 ```
