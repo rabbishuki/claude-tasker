@@ -76,16 +76,28 @@ function checkTestStatus(testFile) {
 function isInImplementationPhase() {
   try {
     // Check if we're in tasker implementation phase
-    const featuresDir = 'docs/features';
-    if (!fs.existsSync(featuresDir)) return false;
+    const businessDir = 'docs/business';
+    if (!fs.existsSync(businessDir)) return false;
     
-    const features = fs.readdirSync(featuresDir);
-    for (const feature of features) {
-      const statusFile = path.join(featuresDir, feature, 'status.json');
-      if (fs.existsSync(statusFile)) {
-        const status = JSON.parse(fs.readFileSync(statusFile, 'utf8'));
-        if (status.current_phase === 'implementation') {
-          return true;
+    // Check all businesses for active features
+    const businesses = fs.readdirSync(businessDir);
+    for (const business of businesses) {
+      const featuresDir = path.join(businessDir, business, 'features');
+      if (!fs.existsSync(featuresDir)) continue;
+      
+      const features = fs.readdirSync(featuresDir);
+      for (const feature of features) {
+        const featurePath = path.join(featuresDir, feature);
+        // Skip if it's a completed feature file (not a directory)
+        if (!fs.statSync(featurePath).isDirectory()) continue;
+        
+        const tasksFile = path.join(featurePath, 'tasks.md');
+        if (fs.existsSync(tasksFile)) {
+          const tasksContent = fs.readFileSync(tasksFile, 'utf8');
+          // In implementation if has task marked as in progress [~]
+          if (tasksContent.includes('- [~]')) {
+            return true;
+          }
         }
       }
     }
